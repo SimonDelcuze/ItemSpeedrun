@@ -7,7 +7,7 @@ public class main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.getCommand("play").setExecutor(this);
+        this.getCommand("play").setExecutor(new Setup());
     }
     @Override
     public void onDisable() {

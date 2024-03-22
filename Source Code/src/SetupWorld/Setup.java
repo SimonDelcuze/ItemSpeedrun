@@ -1,16 +1,14 @@
 package SetupWorld;
 
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.WorldCreator;
 import java.util.Random;
+import org.bukkit.World;
 
-public class Setup extends JavaPlugin implements CommandExecutor {
-
+public class Setup implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
