@@ -1,0 +1,7 @@
+name: MonPlugin
+main: Main.main
+version: 1.0
+commands:
+  play:
+    description: Génère un nouveau monde.
+    usage: /play
