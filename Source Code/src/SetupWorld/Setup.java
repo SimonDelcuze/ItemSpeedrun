@@ -13,6 +13,8 @@ import org.bukkit.block.Biome;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Setup implements CommandExecutor
 {
@@ -54,6 +56,22 @@ public class Setup implements CommandExecutor
         }
     }
 
+    public void showTimer(Player player)
+    {
+        new BukkitRunnable() {
+            int counter = 5;
+            public void run() {
+                if (counter > 0) {
+                    player.sendTitle("", ChatColor.LIGHT_PURPLE + "" + counter);
+                    counter--;
+                } else {
+                    player.sendTitle("", ChatColor.LIGHT_PURPLE + "Go!");
+                    cancel();
+                }
+            }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("plugin"), 10, 20);
+    }
+
     // Load a new map for the player to play on
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
@@ -91,6 +109,10 @@ public class Setup implements CommandExecutor
                 p.teleport(playerLocation);
             }
         }
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            showTimer(p);
+        }
+        //removeCage(player);
         return true;
     }
 }

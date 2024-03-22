@@ -1,4 +1,4 @@
-name: MonPlugin
+name: plugin
 main: Main.main
 version: 1.0
 commands:
