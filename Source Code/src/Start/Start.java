@@ -26,7 +26,8 @@ public class Start implements CommandExecutor {
         this.plugin = plugin;
     }
 
-    public void showTimer(Player player) {
+    public void showTimer(Player player)
+    {
         new BukkitRunnable() {
             int counter = 5;
             ChatColor[] colors = {
@@ -47,19 +48,18 @@ public class Start implements CommandExecutor {
                 } else {
                     ChatColor color = colors[0];
                     player.sendTitle(color + "" + ChatColor.BOLD + "Go!", "");
-                    cancel(); // Arrête le compte à rebours
-
-                    // Déplace le processus de téléportation et de configuration ici
+                    cancel();
                     new BukkitRunnable() {
                         @Override
                         public void run() {
                             for (Player p : Bukkit.getOnlinePlayers()) {
                                 if (plugin.isPlayerReady(p)) {
-                                    setupGamePlayer(p); // Configure et téléporte chaque joueur
+                                    setupGamePlayer(p);
                                 }
                             }
+                            plugin.resetGame();
                         }
-                    }.runTaskLater(Bukkit.getPluginManager().getPlugin("plugin"), 20L); // Exécute après une seconde pour permettre au titre "Go!" de s'afficher
+                    }.runTaskLater(Bukkit.getPluginManager().getPlugin("plugin"), 20L);
                 }
             }
         }.runTaskTimer(Bukkit.getPluginManager().getPlugin("plugin"), 0L, 20L);
@@ -95,6 +95,7 @@ public class Start implements CommandExecutor {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         showTimer(p);
                     }
+                    plugin.setGameStarted(false);
                 }
             } else {
                 sender.sendMessage(ChatColor.YELLOW + "Vous êtes déjà prêt.");

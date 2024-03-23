@@ -31,6 +31,10 @@ public class main extends JavaPlugin {
         }.runTaskTimer(this, 0L, 20L);
     }
 
+    public void resetGame() {
+        readyPlayers.clear();
+        gameStarted = false;
+    }
     public void setPlayerReady(Player player) {
         readyPlayers.add(player.getUniqueId());
     }
