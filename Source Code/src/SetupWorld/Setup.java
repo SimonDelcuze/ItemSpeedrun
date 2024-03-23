@@ -138,7 +138,7 @@ public class Setup implements CommandExecutor
         Random random = new Random();
         itemID = items[random.nextInt(items.length)];
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage("Trouvez un " + itemID.toString() + " pour gagner!");
+            p.sendMessage("§c§l" + "Trouvez un(e) " + itemID.toString() + " pour gagner!");
             org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
             board.getTeam("item").setSuffix(" " + Setup.itemID.name());
         }
