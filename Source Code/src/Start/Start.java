@@ -20,7 +20,7 @@ import org.bukkit.potion.Potion;
 
 public class Start implements CommandExecutor {
 
-    private main plugin;
+    public main plugin;
 
     public Start(main plugin) {
         this.plugin = plugin;
@@ -57,7 +57,6 @@ public class Start implements CommandExecutor {
                                     setupGamePlayer(p);
                                 }
                             }
-                            plugin.resetGame();
                         }
                     }.runTaskLater(Bukkit.getPluginManager().getPlugin("plugin"), 20L);
                 }
@@ -76,6 +75,7 @@ public class Start implements CommandExecutor {
         player.setFoodLevel(20);
         player.setSaturation(20);
         player.setGameMode(GameMode.SURVIVAL);
+        world.setDifficulty(Difficulty.HARD);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package SetupWorld;
 
 import Main.main;
+import Scoreboard.timer.Timer;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,6 +21,8 @@ import org.bukkit.potion.Potion;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.Bukkit;
+import static Scoreboard.timer.Timer.sec;
+import static Scoreboard.timer.Timer.min;
 
 public class Setup implements CommandExecutor
 {
@@ -110,6 +113,9 @@ public class Setup implements CommandExecutor
     }
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
+        sec = 0;
+        min = 0;
+        plugin.resetGame();
         if (!(sender instanceof Player)) {
             sender.sendMessage("Cette commande ne peut être utilisée que par un joueur.");
             return false;

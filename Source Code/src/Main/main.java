@@ -9,10 +9,13 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.entity.Player;
+import Scoreboard.scoreboard;
 
 public class main extends JavaPlugin {
     private Set<UUID> readyPlayers = new HashSet<>();
     private boolean gameStarted = false;
+
+    private static main instance;
 
     @Override
     public void onEnable() {
@@ -29,6 +32,12 @@ public class main extends JavaPlugin {
                 winInstance.checkPlayersForDiamondSword();
             }
         }.runTaskTimer(this, 0L, 20L);
+        instance = this;
+        getServer().getPluginManager().registerEvents(new events.evenements(), this);
+    }
+
+    public static main getInstance() {
+        return instance;
     }
 
     public void resetGame() {
