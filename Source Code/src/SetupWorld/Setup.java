@@ -1,122 +1,45 @@
 package SetupWorld;
 
+import Main.main;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import java.util.Random;
-
 import org.bukkit.block.Biome;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
-import java.io.File;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.block.Block;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.Potion;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.Bukkit;
 
 public class Setup implements CommandExecutor
 {
 
-    public void setupPlayer(Player player)
+    private main plugin;
+
+    public Setup(main plugin) {
+        this.plugin = plugin;
+    }
+    public void setupPlayerInSpawn(Player player)
     {
         player.getInventory().clear();
-
         player.setHealth(20);
         player.setFoodLevel(20);
         player.setSaturation(20);
+        player.setGameMode(GameMode.ADVENTURE);
         player.getInventory().clear();
-        PlayerInventory inventory = player.getInventory();
-        ItemStack item = new ItemStack(Material.COOKED_BEEF, 64);
-        inventory.addItem(item);
     }
 
-    public void encasePlayer(Player player, Material material)
-    {
-        World world = player.getWorld();
-        Location playerLocation = player.getLocation();
-        playerLocation.setX(playerLocation.getBlockX() + 0.5);
-        playerLocation.setY(playerLocation.getBlockY());
-        playerLocation.setZ(playerLocation.getBlockZ() + 0.5);
-        int radius = 2;
-
-        for (int x = -radius; x <= radius; x++) {
-            for (int y = 0; y <= 4; y++) {
-                for (int z = -radius; z <= radius; z++) {
-                    if ((y == 1 || y == 2 || y == 3) && (x == 0 || x == 1 || x == -1) && (z == 0 || z == 1 || z == -1)) {
-                        Location blockLocation = playerLocation.clone().add(x, y, z);
-                        world.getBlockAt(blockLocation).setType(Material.AIR);
-                        continue;
-                    }
-                    Location blockLocation = playerLocation.clone().add(x, y, z);
-                    world.getBlockAt(blockLocation).setType(material);
-                }
-            }
-        }
-    }
-
-    public void showTimer(Player player)
-    {
-        new BukkitRunnable() {
-            int counter = 5;
-            ChatColor[] colors = {
-                    ChatColor.RED,
-                    ChatColor.GOLD,
-                    ChatColor.YELLOW,
-                    ChatColor.GREEN,
-                    ChatColor.AQUA,
-                    ChatColor.BLUE,
-                    ChatColor.LIGHT_PURPLE
-            };
-
-            public void run() {
-                if (counter > 0) {
-                    ChatColor color = colors[counter % colors.length];
-                    player.sendTitle(color + "" + ChatColor.BOLD + counter, "");
-                    counter--;
-                } else {
-                    ChatColor color = colors[0];
-                    player.sendTitle(color + "" + ChatColor.BOLD + "Go!", "");
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            player.sendTitle("", "");
-                        }
-                    }.runTaskLater(Bukkit.getPluginManager().getPlugin("plugin"), 20L);
-                    cancel();
-                }
-            }
-        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("plugin"), 0, 20L);
-    }
-
-    public void removeCage(Player player, long delay, JavaPlugin plugin, Location playerLocation) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                World world = player.getWorld();
-                int radius = 2;
-
-                for (int x = -radius; x <= radius; x++) {
-                    for (int y = 0; y <= 4; y++) {
-                        for (int z = -radius; z <= radius; z++) {
-                            Location blockLocation = playerLocation.clone().add(x, y, z);
-                            world.getBlockAt(blockLocation).setType(Material.AIR);
-                        }
-                    }
-                }
-            }
-        }.runTaskLater(plugin, delay * 20L);
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            player.setGameMode(GameMode.SURVIVAL);
-        }
-    }
-
-    public World generateWorld(CommandSender sender)
-    {
+    public World generateWorld(CommandSender sender) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "Cette commande ne peut être exécutée que par un joueur.");
             return null;
@@ -142,13 +65,47 @@ public class Setup implements CommandExecutor
             }
         }
         player.sendTitle("", "");
+        newWorld.setSpawnLocation(0, newWorld.getHighestBlockYAt(0, 0) + 1, 0);
+
         return newWorld;
     }
 
     public void setDifficulty(Difficulty difficulty)
     {
-        for (World world : Bukkit.getWorlds()) {
+        for (World world : Bukkit.getWorlds())
             world.setDifficulty(difficulty);
+    }
+
+    @SuppressWarnings("deprecation")
+    public void buildSpawn(Location spawnLocation) {
+        World world = spawnLocation.getWorld();
+        int radius = 10;
+        int height = 5;
+        Random random = new Random();
+
+        Material[] glassTypes = {
+                Material.WHITE_STAINED_GLASS, Material.ORANGE_STAINED_GLASS, Material.MAGENTA_STAINED_GLASS,
+                Material.LIGHT_BLUE_STAINED_GLASS, Material.YELLOW_STAINED_GLASS, Material.LIME_STAINED_GLASS,
+                Material.PINK_STAINED_GLASS, Material.GRAY_STAINED_GLASS, Material.LIGHT_GRAY_STAINED_GLASS,
+                Material.CYAN_STAINED_GLASS, Material.PURPLE_STAINED_GLASS, Material.BLUE_STAINED_GLASS,
+                Material.BROWN_STAINED_GLASS, Material.GREEN_STAINED_GLASS, Material.RED_STAINED_GLASS,
+                Material.BLACK_STAINED_GLASS
+        };
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = 0; y < height; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    boolean isEdge = x == -radius || x == radius || z == -radius || z == radius || y == 0;
+                    Location blockLocation = spawnLocation.clone().add(x, y, z);
+                    Block block = world.getBlockAt(blockLocation);
+
+                    if (isEdge) {
+                        Material selectedGlass = glassTypes[random.nextInt(glassTypes.length)];
+                        BlockData glassBlockData = selectedGlass.createBlockData();
+                        block.setBlockData(glassBlockData);
+                    }
+                }
+            }
         }
     }
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
@@ -159,22 +116,19 @@ public class Setup implements CommandExecutor
         }
         Player player = (Player) sender;
         World newWorld = generateWorld(sender);
-        Location spawnLocation = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 1, 0);
+        Location spawnLocation = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 50, 0);
+        Location spawnPlayer = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 51, 0);
 
         newWorld.setPVP(false);
+        buildSpawn(spawnLocation);
         for (Player p : Bukkit.getOnlinePlayers()) {
-            player.teleport(spawnLocation);
+            p.teleport(spawnPlayer);
             Location playerLocation = player.getLocation();
-            setupPlayer(p);
-            encasePlayer(p, Material.BARRIER);
-            playerLocation.setX(playerLocation.getBlockX() + 0.5);
-            playerLocation.setY(playerLocation.getBlockY() + 1);
-            playerLocation.setZ(playerLocation.getBlockZ() + 0.5);
-            p.teleport(playerLocation);
-            showTimer(p);
+            setupPlayerInSpawn(p);
         }
-        removeCage(player, 6L, (JavaPlugin) Bukkit.getPluginManager().getPlugin("plugin"), spawnLocation);
-        setDifficulty(Difficulty.HARD);
+        newWorld.setDifficulty(Difficulty.PEACEFUL);
+        plugin.setGameStarted(true);
+        sender.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
         return true;
     }
 }

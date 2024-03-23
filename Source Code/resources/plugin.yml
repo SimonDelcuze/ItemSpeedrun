@@ -1,7 +1,11 @@
 name: plugin
 main: Main.main
 version: 1.0
+api-version: 1.17
 commands:
   play:
     description: Génère un nouveau monde.
     usage: /play
+  ready:
+    description: Prêt à jouer.
+    usage: /ready
