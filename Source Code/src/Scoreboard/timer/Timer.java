@@ -1,5 +1,6 @@
 package Scoreboard.timer;
 
+import SetupWorld.Setup;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

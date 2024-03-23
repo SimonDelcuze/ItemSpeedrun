@@ -9,6 +9,9 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.ScoreboardManager;
 import Scoreboard.timer.Timer;
+import SetupWorld.Setup;
+
+import java.io.Console;
 
 public class scoreboard {
 
@@ -31,8 +34,10 @@ public class scoreboard {
         obj.getScore("§dTimer §7-§c ").setScore(4);
 
 
-        Score item = obj.getScore("§dItem §7- §c ");
-        item.setScore(3);
+        Team itemid = obj.getScoreboard().registerNewTeam("item");
+        itemid.addEntry("§dItem §7-§c ");
+        itemid.setSuffix("");
+        obj.getScore("§dItem §7-§c ").setScore(3);
 
         Score space2 = obj.getScore("  ");
         space2.setScore(2);
@@ -48,5 +53,10 @@ public class scoreboard {
     public static void updatetimer(Player player){
         org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
         board.getTeam("timer").setSuffix("" + Timer.timer);
+    }
+    public static void updateitem(Player player){
+        System.out.println("" + Setup.itemID.name());
+        org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
+        board.getTeam("item").setSuffix(" " + Setup.itemID.name());
     }
 }

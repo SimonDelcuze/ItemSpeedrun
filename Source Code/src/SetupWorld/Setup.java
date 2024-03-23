@@ -2,6 +2,7 @@ package SetupWorld;
 
 import Main.main;
 import Scoreboard.timer.Timer;
+import Scoreboard.scoreboard;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,6 +22,9 @@ import org.bukkit.potion.Potion;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.Bukkit;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+
 import static Scoreboard.timer.Timer.sec;
 import static Scoreboard.timer.Timer.min;
 
@@ -28,6 +32,13 @@ public class Setup implements CommandExecutor
 {
 
     private main plugin;
+    public static Material itemID = Material.DIAMOND;
+
+    private Material[] items = {
+            Material.DIAMOND, Material.GOLD_INGOT, Material.IRON_INGOT,
+            Material.EMERALD, Material.COAL, Material.DIAMOND_SWORD, Material.FERMENTED_SPIDER_EYE, Material.GOLDEN_APPLE, Material.GOLDEN_BOOTS, Material.GOLDEN_CHESTPLATE, Material.GOLDEN_HELMET, Material.GOLDEN_LEGGINGS, Material.GOLDEN_SHOVEL, Material.GOLDEN_SWORD, Material.GOLDEN_AXE, Material.GOLDEN_HOE, Material.GOLDEN_PICKAXE, Material.GOLDEN_HORSE_ARMOR, Material.GOLDEN_CARROT, Material.GOLDEN_HELMET, Material.GOLDEN_LEGGINGS, Material.GOLDEN_SHOVEL, Material.GOLDEN_SWORD, Material.GOLDEN_AXE, Material.GOLDEN_HOE, Material.GOLDEN_PICKAXE, Material.GOLDEN_HORSE_ARMOR, Material.GOLDEN_CARROT, Material.BROWN_MUSHROOM, Material.COBBLESTONE_STAIRS, Material.DIRT, Material.MELON, Material.ENDER_CHEST, Material.JUKEBOX, Material.COOKIE, Material.ACACIA_DOOR,
+            Material.GRAVEL, Material.PAINTING, Material.LAPIS_ORE, Material.POISONOUS_POTATO, Material.TNT, Material.TORCH, Material.PAPER, Material.HOPPER, Material.BLAZE_POWDER, Material.BLAZE_ROD, Material.NETHER_STAR, Material.NETHER_WART, Material.NETHER_BRICK, Material.NETHER_BRICK, Material.NETHER_BRICK_SLAB, Material.EMERALD_BLOCK
+    };
 
     public Setup(main plugin) {
         this.plugin = plugin;
@@ -61,7 +72,9 @@ public class Setup implements CommandExecutor
             worldCreator.seed(seed);
             newWorld = player.getServer().createWorld(worldCreator);
             biomeAtSpawn = newWorld.getBiome(0, 0);
-            if (biomeAtSpawn != Biome.OCEAN && biomeAtSpawn != Biome.RIVER && biomeAtSpawn != Biome.DEEP_OCEAN) {
+            if (biomeAtSpawn != Biome.OCEAN && biomeAtSpawn != Biome.RIVER && biomeAtSpawn != Biome.DEEP_OCEAN && biomeAtSpawn != Biome.COLD_OCEAN
+                    && biomeAtSpawn != Biome.FROZEN_OCEAN && biomeAtSpawn != Biome.LUKEWARM_OCEAN && biomeAtSpawn != Biome.WARM_OCEAN && biomeAtSpawn != Biome.DEEP_WARM_OCEAN
+                    && biomeAtSpawn != Biome.DEEP_LUKEWARM_OCEAN && biomeAtSpawn != Biome.DEEP_COLD_OCEAN && biomeAtSpawn != Biome.DEEP_FROZEN_OCEAN) {
                 acceptableBiome = true;
             } else {
                 player.getServer().unloadWorld(newWorld, false);
@@ -122,6 +135,13 @@ public class Setup implements CommandExecutor
         }
         Player player = (Player) sender;
         World newWorld = generateWorld(sender);
+        Random random = new Random();
+        itemID = items[random.nextInt(items.length)];
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage("Trouvez un " + itemID.toString() + " pour gagner!");
+            org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
+            board.getTeam("item").setSuffix(" " + Setup.itemID.name());
+        }
         Location spawnLocation = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 50, 0);
         Location spawnPlayer = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 51, 0);
 
