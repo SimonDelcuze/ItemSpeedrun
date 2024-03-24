@@ -82,7 +82,7 @@ public class Start implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "Cette commande ne peut être utilisée que par un joueur.");
+            sender.sendMessage(ChatColor.RED + "This comamnd can only be done by a player.");
             return true;
         }
 
@@ -91,7 +91,7 @@ public class Start implements CommandExecutor {
         if (plugin.isGameStarted()) {
             if (!plugin.isPlayerReady(player)) {
                 plugin.setPlayerReady(player);
-                sender.sendMessage(ChatColor.GREEN + "Vous êtes maintenant prêt!");
+                sender.sendMessage(ChatColor.GREEN + "You are now ready!");
                 if (plugin.getReadyCount() == Bukkit.getOnlinePlayers().size()) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
                         showTimer(p);
@@ -99,10 +99,10 @@ public class Start implements CommandExecutor {
                     plugin.setGameStarted(false);
                 }
             } else {
-                sender.sendMessage(ChatColor.YELLOW + "Vous êtes déjà prêt.");
+                sender.sendMessage(ChatColor.YELLOW + "You are already ready!");
             }
         } else {
-            sender.sendMessage(ChatColor.RED + "Le jeu n'a pas encore commencé. Utilisez /play pour démarrer.");
+            sender.sendMessage(ChatColor.RED + "The game has not started yet, do /play to start the game.");
         }
         return true;
     }

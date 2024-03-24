@@ -95,7 +95,7 @@
 
         public World generateWorld(CommandSender sender) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "Cette commande ne peut être exécutée que par un joueur.");
+                sender.sendMessage(ChatColor.RED + "This comamnd can only be done by a player.");
                 return null;
             }
             Player player = (Player) sender;
@@ -232,7 +232,7 @@
                 Player player = (Player) event.getWhoClicked();
                 World newWorld = generateWorld(player);
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    p.sendMessage("§c§l" + "Trouvez un(e) " + itemID.toString() + " pour gagner!");
+                    p.sendMessage("§c§l" + "Find a(n) " + itemID.toString() + " to win!");
                     org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
                     board.getTeam("item").setSuffix(" " + Setup.itemID.name());
                 }
@@ -248,7 +248,7 @@
                 newWorld.setDifficulty(Difficulty.PEACEFUL);
                 plugin.setGameStarted(true);
                 for (Player p : Bukkit.getOnlinePlayers())
-                    p.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
+                    p.sendMessage(ChatColor.GREEN + "The game starts, do /ready when you want to start !");
             }
         }
 
@@ -256,12 +256,12 @@
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
         {
             if (!(sender instanceof Player)) {
-                sender.sendMessage("Cette commande ne peut être utilisée que par un joueur.");
+                sender.sendMessage("This comamnd can only be done by a player.");
                 return false;
             }
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastPlayCommandTime < cooldown) {
-                sender.sendMessage(ChatColor.RED + "Veuillez patienter avant de réutiliser cette commande.");
+                sender.sendMessage(ChatColor.RED + "Wait before using this command again.");
                 return true;
             }
             lastPlayCommandTime = currentTime;
