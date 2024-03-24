@@ -13,7 +13,7 @@ As an open-source project, we welcome any contributions from the community! If y
 
 ## How to Play
 
-After installing the plugin on your Minecraft server, do /play to start the mini-game. Stay tuned for the target item announced at the beginning of the game and be the first to obtain it to win.
+After installing the plugin on your Minecraft server, do /play to start the mini-game. Stay tuned for the target item announced at the beginning of the game and when all the players are ready with the /ready command, be the first to obtain it to win.
 
 ## Installation
 
