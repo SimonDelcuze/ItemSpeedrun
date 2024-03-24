@@ -45,6 +45,10 @@ public class Setup implements CommandExecutor, Listener
 {
 
     private main plugin;
+    private static long lastPlayCommandTime = 0;
+    private String lastWorldName = null;
+    
+    private final long cooldown = 30000;
     private Map<Player, String> gameLengths = new HashMap<>();
     public static Material itemID = Material.DIAMOND;
 
@@ -83,19 +87,28 @@ public class Setup implements CommandExecutor, Listener
             return null;
         }
         Player player = (Player) sender;
+
+        // Décharger le monde précédent si nécessaire
+        if (lastWorldName != null && Bukkit.getWorld(lastWorldName) != null) {
+            Bukkit.getServer().unloadWorld(Bukkit.getWorld(lastWorldName), true);
+        }
+
         World newWorld = null;
         boolean acceptableBiome = false;
         long seed;
         WorldCreator worldCreator;
         Biome biomeAtSpawn;
 
-        player.sendTitle(ChatColor.YELLOW + "Loading map...", "");
+        for (Player p : Bukkit.getOnlinePlayers())
+            p.sendTitle(ChatColor.YELLOW + "Loading map...", "", 10, 300, 10);
+
         while (!acceptableBiome) {
             seed = new Random().nextLong();
             worldCreator = new WorldCreator("world_" + seed);
             worldCreator.seed(seed);
             newWorld = player.getServer().createWorld(worldCreator);
             biomeAtSpawn = newWorld.getBiome(0, 0);
+
             if (biomeAtSpawn != Biome.OCEAN && biomeAtSpawn != Biome.RIVER && biomeAtSpawn != Biome.DEEP_OCEAN && biomeAtSpawn != Biome.COLD_OCEAN
                     && biomeAtSpawn != Biome.FROZEN_OCEAN && biomeAtSpawn != Biome.LUKEWARM_OCEAN && biomeAtSpawn != Biome.WARM_OCEAN && biomeAtSpawn != Biome.DEEP_WARM_OCEAN
                     && biomeAtSpawn != Biome.DEEP_LUKEWARM_OCEAN && biomeAtSpawn != Biome.DEEP_COLD_OCEAN && biomeAtSpawn != Biome.DEEP_FROZEN_OCEAN) {
@@ -104,11 +117,14 @@ public class Setup implements CommandExecutor, Listener
                 player.getServer().unloadWorld(newWorld, false);
             }
         }
+
         player.sendTitle("", "");
         newWorld.setSpawnLocation(0, newWorld.getHighestBlockYAt(0, 0) + 1, 0);
+        lastWorldName = newWorld.getName();
 
         return newWorld;
     }
+
 
     public void setDifficulty(Difficulty difficulty)
     {
@@ -224,7 +240,8 @@ public class Setup implements CommandExecutor, Listener
             }
             newWorld.setDifficulty(Difficulty.PEACEFUL);
             plugin.setGameStarted(true);
-            player.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
+            for (Player p : Bukkit.getOnlinePlayers())
+                player.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
         }
     }
 
@@ -235,6 +252,12 @@ public class Setup implements CommandExecutor, Listener
             sender.sendMessage("Cette commande ne peut être utilisée que par un joueur.");
             return false;
         }
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastPlayCommandTime < cooldown) {
+            sender.sendMessage(ChatColor.RED + "Veuillez patienter avant de réutiliser cette commande.");
+            return true;
+        }
+        lastPlayCommandTime = currentTime;
         Player player = (Player) sender;
         if (!gameLengths.containsKey(player)) {
             openGameLengthInventory(player);
@@ -243,3 +266,4 @@ public class Setup implements CommandExecutor, Listener
         return false;
     }
 }
+

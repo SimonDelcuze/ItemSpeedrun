@@ -15,7 +15,6 @@ import Scoreboard.scoreboard;
 public class main extends JavaPlugin {
     private Set<UUID> readyPlayers = new HashSet<>();
     private boolean gameStarted = false;
-
     private static main instance;
 
     @Override
