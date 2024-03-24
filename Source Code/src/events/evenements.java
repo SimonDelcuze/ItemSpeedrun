@@ -15,7 +15,5 @@ public class evenements implements Listener{
     public void Join(PlayerJoinEvent event){
         Player player = event.getPlayer();
         scoreboard.SetScoreboard(player);
-        Timer timer = new Timer();
-        timer.runTaskTimer(main.getInstance(), 0, 20);
     }
 }

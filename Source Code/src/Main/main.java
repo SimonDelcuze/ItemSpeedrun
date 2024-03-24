@@ -1,5 +1,6 @@
 package Main;
 
+import Scoreboard.timer.Timer;
 import SetupWorld.Setup;
 import Start.Start;
 import WinCond.Win;
@@ -22,6 +23,7 @@ public class main extends JavaPlugin {
         Setup setup = new Setup(this);
         Start start = new Start(this);
         Win winInstance = new Win();
+        Timer timer = new Timer();
 
         getServer().getPluginManager().registerEvents(setup, this);
         this.getCommand("play").setExecutor(setup);
@@ -35,6 +37,8 @@ public class main extends JavaPlugin {
         }.runTaskTimer(this, 0L, 20L);
         instance = this;
         getServer().getPluginManager().registerEvents(new events.evenements(), this);
+        timer.runTaskTimer(main.getInstance(), 0, 20);
+
     }
 
     public static main getInstance() {
