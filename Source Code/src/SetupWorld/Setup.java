@@ -54,7 +54,7 @@
         private Material[] shortitem = {
                 Material.STONE_AXE, Material.GRAVEL, Material.COBBLESTONE, Material.DIRT, Material.SAND, Material.COAL, Material.PAPER, Material.BONE, Material.FLINT,
                 Material.BOOK, Material.BOOKSHELF, Material.BRICK, Material.BUCKET, Material.CAKE, Material.CARROT, Material.CHEST, Material.CLAY, Material.BREAD,
-                Material.CACTUS, Material.COOKED_BEEF, Material.COOKED_CHICKEN, Material.COOKED_MUTTON, Material.COOKED_RABBIT
+                Material.CACTUS, Material.COOKED_CHICKEN, Material.COOKED_MUTTON, Material.COOKED_RABBIT
         };
         private Material[] miditem = {
                 Material.IRON_AXE, Material.IRON_INGOT, Material.IRON_BOOTS, Material.IRON_CHESTPLATE, Material.IRON_HELMET, Material.IRON_LEGGINGS, Material.IRON_PICKAXE, Material.IRON_SWORD,

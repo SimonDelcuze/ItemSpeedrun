@@ -1,5 +1,6 @@
 package WinCond;
 
+import Main.main;
 import SetupWorld.Setup;
 import Start.Start;
 import org.bukkit.*;
@@ -18,8 +19,12 @@ import static Scoreboard.timer.Timer.min;
 
 import java.util.Set;
 
-
 public class Win {
+    private main plugin;
+
+    public Win(main plugin) {
+        this.plugin = plugin;
+    }
     public void checkPlayersForDiamondSword() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getInventory().contains(Setup.itemID)) {
@@ -30,7 +35,10 @@ public class Win {
                     p.teleport(spawnLocation);
                     p.sendTitle(ChatColor.YELLOW + "The item has been found", "");
                     p.sendMessage("§c§l" + player.getName() + " has won in " + min + "m " + sec + "s");
+                    for (int i = 0; i < 10; i++)
+                        p.playSound(p.getLocation(), Sound.ENTITY_GOAT_DEATH, 1, 1);
                 }
+                plugin.resetGame();
                 break;
             }
         }

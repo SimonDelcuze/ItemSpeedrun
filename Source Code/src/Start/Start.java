@@ -71,10 +71,12 @@ public class Start implements CommandExecutor {
         player.getInventory().clear();
         ItemStack steaks = new ItemStack(Material.COOKED_BEEF, 64);
         player.getInventory().addItem(steaks);
+        player.performCommand("trackingcompass");
         player.setHealth(20);
         player.setFoodLevel(20);
         player.setSaturation(20);
         player.setGameMode(GameMode.SURVIVAL);
+        player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 1, 1);
         world.setDifficulty(Difficulty.HARD);
         world.setPVP(true);
     }

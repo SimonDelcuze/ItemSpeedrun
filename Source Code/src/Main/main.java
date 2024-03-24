@@ -22,7 +22,7 @@ public class main extends JavaPlugin {
     public void onEnable() {
         Setup setup = new Setup(this);
         Start start = new Start(this);
-        Win winInstance = new Win();
+        Win winInstance = new Win(this);
         Timer timer = new Timer();
 
         getServer().getPluginManager().registerEvents(setup, this);
