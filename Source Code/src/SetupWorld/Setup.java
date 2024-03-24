@@ -71,6 +71,7 @@
             this.plugin = plugin;
         }
 
+        @EventHandler
         public void onPlayerRespawn(PlayerRespawnEvent event)
         {
             if (lastWorldName != null) {
