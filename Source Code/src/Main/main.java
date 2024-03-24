@@ -24,6 +24,7 @@ public class main extends JavaPlugin {
         Win winInstance = new Win();
 
         getServer().getPluginManager().registerEvents(setup, this);
+        getServer().getPluginManager().registerEvents(setup, this);
         this.getCommand("play").setExecutor(setup);
         this.getCommand("ready").setExecutor(start);
 
