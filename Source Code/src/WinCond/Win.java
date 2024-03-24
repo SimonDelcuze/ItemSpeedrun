@@ -28,7 +28,7 @@ public class Win {
                     p.getInventory().clear();
                     Location spawnLocation = p.getWorld().getHighestBlockAt(0, 0).getLocation();
                     p.teleport(spawnLocation);
-                    player.sendTitle(ChatColor.YELLOW + "The item has been found", "");
+                    p.sendTitle(ChatColor.YELLOW + "The item has been found", "");
                     p.sendMessage("§c§l" + player.getName() + " has won in " + min + "m " + sec + "s");
                 }
                 break;

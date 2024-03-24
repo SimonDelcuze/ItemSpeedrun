@@ -70,7 +70,7 @@
         public Setup(main plugin) {
             this.plugin = plugin;
         }
-
+²
         @EventHandler
         public void onPlayerRespawn(PlayerRespawnEvent event)
         {
@@ -233,7 +233,7 @@
                 World newWorld = generateWorld(player);
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     p.sendMessage("§c§l" + "Find a(n) " + itemID.toString() + " to win!");
-                    org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
+                    org.bukkit.scoreboard.Scoreboard board = p.getScoreboard();
                     board.getTeam("item").setSuffix(" " + Setup.itemID.name());
                 }
                 Location spawnLocation = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 50, 0);
