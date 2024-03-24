@@ -236,9 +236,19 @@ public class Setup implements CommandExecutor, Listener
             return false;
         }
         Player player = (Player) sender;
+<<<<<<< HEAD
         if (!gameLengths.containsKey(player)) {
             openGameLengthInventory(player);
             return true;
+=======
+        World newWorld = generateWorld(sender);
+        Random random = new Random();
+        itemID = items[random.nextInt(items.length)];
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            p.sendMessage("§c§l" + "Trouvez un(e) " + itemID.toString() + " pour gagner!");
+            org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
+            board.getTeam("item").setSuffix(" " + Setup.itemID.name());
+>>>>>>> a2dcad1e64f3459c2cfbfb4985024f3880000fe1
         }
 
         return false;
