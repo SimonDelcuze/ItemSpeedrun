@@ -47,7 +47,7 @@ public class Setup implements CommandExecutor, Listener
     private main plugin;
     private static long lastPlayCommandTime = 0;
     private String lastWorldName = null;
-    
+
     private final long cooldown = 30000;
     private Map<Player, String> gameLengths = new HashMap<>();
     public static Material itemID = Material.DIAMOND;
@@ -241,7 +241,7 @@ public class Setup implements CommandExecutor, Listener
             newWorld.setDifficulty(Difficulty.PEACEFUL);
             plugin.setGameStarted(true);
             for (Player p : Bukkit.getOnlinePlayers())
-                player.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
+                p.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
         }
     }
 
