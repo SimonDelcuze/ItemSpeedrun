@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import org.bukkit.entity.Player;
+import SetupWorld.Setup;
 import Scoreboard.scoreboard;
 
 public class main extends JavaPlugin {
@@ -23,6 +24,7 @@ public class main extends JavaPlugin {
         Start start = new Start(this);
         Win winInstance = new Win();
 
+        getServer().getPluginManager().registerEvents(setup, this);
         this.getCommand("play").setExecutor(setup);
         this.getCommand("ready").setExecutor(start);
 

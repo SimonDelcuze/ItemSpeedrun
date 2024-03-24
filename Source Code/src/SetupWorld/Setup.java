@@ -8,8 +8,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import org.bukkit.block.Biome;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -24,20 +28,40 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import static Scoreboard.timer.Timer.sec;
 import static Scoreboard.timer.Timer.min;
 
-public class Setup implements CommandExecutor
+public class Setup implements CommandExecutor, Listener
 {
 
     private main plugin;
+    private Map<Player, String> gameLengths = new HashMap<>();
     public static Material itemID = Material.DIAMOND;
 
-    private Material[] items = {
-            Material.DIAMOND, Material.GOLD_INGOT, Material.IRON_INGOT,
-            Material.EMERALD, Material.COAL, Material.DIAMOND_SWORD, Material.FERMENTED_SPIDER_EYE, Material.GOLDEN_APPLE, Material.GOLDEN_BOOTS, Material.GOLDEN_CHESTPLATE, Material.GOLDEN_HELMET, Material.GOLDEN_LEGGINGS, Material.GOLDEN_SHOVEL, Material.GOLDEN_SWORD, Material.GOLDEN_AXE, Material.GOLDEN_HOE, Material.GOLDEN_PICKAXE, Material.GOLDEN_HORSE_ARMOR, Material.GOLDEN_CARROT, Material.GOLDEN_HELMET, Material.GOLDEN_LEGGINGS, Material.GOLDEN_SHOVEL, Material.GOLDEN_SWORD, Material.GOLDEN_AXE, Material.GOLDEN_HOE, Material.GOLDEN_PICKAXE, Material.GOLDEN_HORSE_ARMOR, Material.GOLDEN_CARROT, Material.BROWN_MUSHROOM, Material.COBBLESTONE_STAIRS, Material.DIRT, Material.MELON, Material.ENDER_CHEST, Material.JUKEBOX, Material.COOKIE, Material.ACACIA_DOOR,
-            Material.GRAVEL, Material.PAINTING, Material.LAPIS_ORE, Material.POISONOUS_POTATO, Material.TNT, Material.TORCH, Material.PAPER, Material.HOPPER, Material.BLAZE_POWDER, Material.BLAZE_ROD, Material.NETHER_STAR, Material.NETHER_WART, Material.NETHER_BRICK, Material.NETHER_BRICK, Material.NETHER_BRICK_SLAB, Material.EMERALD_BLOCK
+    private Material[] shortitem = {
+            Material.STONE_AXE, Material.GRAVEL, Material.COBBLESTONE, Material.DIRT, Material.SAND, Material.COAL, Material.PAPER, Material.BONE, Material.FLINT,
+            Material.BOOK, Material.BOOKSHELF, Material.BRICK, Material.BUCKET, Material.CAKE, Material.CARROT, Material.CHEST, Material.CLAY, Material.BREAD,
+            Material.CACTUS, Material.COOKED_BEEF, Material.COOKED_CHICKEN, Material.COOKED_MUTTON, Material.COOKED_RABBIT
+    };
+    private Material[] miditem = {
+            Material.IRON_AXE, Material.IRON_INGOT, Material.IRON_BOOTS, Material.IRON_CHESTPLATE, Material.IRON_HELMET, Material.IRON_LEGGINGS, Material.IRON_PICKAXE, Material.IRON_SWORD,
+            Material.GOLDEN_CARROT, Material.COCOA, Material.EGG, Material.ENDER_PEARL, Material.PUMPKIN, Material.PUMPKIN_PIE, Material.RABBIT_FOOT, Material.MINECART, Material.SUGAR,
+            Material.WRITTEN_BOOK, Material.REDSTONE_ORE, Material.REDSTONE_BLOCK
+    };
+    private Material[] longitem = {
+            Material.DIAMOND_SWORD, Material.DIAMOND, Material.DIAMOND_AXE, Material.DIAMOND_BOOTS, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_HELMET, Material.DIAMOND_LEGGINGS, Material.DIAMOND_PICKAXE,
+            Material.NETHER_BRICK, Material.BLAZE_POWDER, Material.NETHERRACK, Material.NETHER_STAR, Material.DRAGON_EGG, Material.ENDER_CHEST, Material.BEACON, Material.EMERALD,
+            Material.GOLDEN_APPLE, Material.JUKEBOX, Material.PRISMARINE, Material.SEA_LANTERN, Material.SPONGE
     };
 
     public Setup(main plugin) {
@@ -124,37 +148,99 @@ public class Setup implements CommandExecutor
             }
         }
     }
+    public void openGameLengthInventory(Player player) {
+        Inventory inventory = Bukkit.createInventory(null, 9, "Choose Game Length");
+
+        ItemStack paper1 = new ItemStack(Material.PAPER);
+        ItemMeta meta1 = paper1.getItemMeta();
+        meta1.setDisplayName("Short Game");
+        paper1.setItemMeta(meta1);
+
+        ItemStack paper2 = new ItemStack(Material.PAPER);
+        ItemMeta meta2 = paper2.getItemMeta();
+        meta2.setDisplayName("Medium Game");
+        paper2.setItemMeta(meta2);
+
+        ItemStack paper3 = new ItemStack(Material.PAPER);
+        ItemMeta meta3 = paper3.getItemMeta();
+        meta3.setDisplayName("Long Game");
+        paper3.setItemMeta(meta3);
+
+        inventory.setItem(3, paper1);
+        inventory.setItem(4, paper2);
+        inventory.setItem(5, paper3);
+
+        player.openInventory(inventory);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        Random random = new Random();
+
+        if (event.getView().getTitle().equals("Choose Game Length")) {
+            event.setCancelled(true);
+            if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PAPER) {
+                Player player = (Player) event.getWhoClicked();
+                String gameLength = event.getCurrentItem().getItemMeta().getDisplayName();
+                switch (gameLength) {
+                    case "Short Game":
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            itemID = shortitem[random.nextInt(shortitem.length)];
+
+                        }
+                        break;
+                    case "Medium Game":
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            itemID = miditem[random.nextInt(miditem.length)];
+                        }
+                        break;
+                    case "Long Game":
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            itemID = longitem[random.nextInt(longitem.length)];
+                        }
+                        break;
+                }
+                player.closeInventory();
+            }
+            sec = 0;
+            min = 0;
+            plugin.resetGame();
+            Player player = (Player) event.getWhoClicked();
+            World newWorld = generateWorld(player);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.sendMessage("Trouvez un " + itemID.toString() + " pour gagner!");
+                org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
+                board.getTeam("item").setSuffix(" " + Setup.itemID.name());
+            }
+            Location spawnLocation = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 50, 0);
+            Location spawnPlayer = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 51, 0);
+
+            newWorld.setPVP(false);
+            buildSpawn(spawnLocation);
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.teleport(spawnPlayer);
+                Location playerLocation = player.getLocation();
+                setupPlayerInSpawn(p);
+            }
+            newWorld.setDifficulty(Difficulty.PEACEFUL);
+            plugin.setGameStarted(true);
+            player.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
+        }
+    }
+
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        sec = 0;
-        min = 0;
-        plugin.resetGame();
         if (!(sender instanceof Player)) {
             sender.sendMessage("Cette commande ne peut être utilisée que par un joueur.");
             return false;
         }
         Player player = (Player) sender;
-        World newWorld = generateWorld(sender);
-        Random random = new Random();
-        itemID = items[random.nextInt(items.length)];
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendMessage("Trouvez un " + itemID.toString() + " pour gagner!");
-            org.bukkit.scoreboard.Scoreboard board = player.getScoreboard();
-            board.getTeam("item").setSuffix(" " + Setup.itemID.name());
+        if (!gameLengths.containsKey(player)) {
+            openGameLengthInventory(player);
+            return true;
         }
-        Location spawnLocation = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 50, 0);
-        Location spawnPlayer = newWorld.getHighestBlockAt(newWorld.getSpawnLocation()).getLocation().add(0, 51, 0);
 
-        newWorld.setPVP(false);
-        buildSpawn(spawnLocation);
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            p.teleport(spawnPlayer);
-            Location playerLocation = player.getLocation();
-            setupPlayerInSpawn(p);
-        }
-        newWorld.setDifficulty(Difficulty.PEACEFUL);
-        plugin.setGameStarted(true);
-        sender.sendMessage(ChatColor.GREEN + "Le jeu commence! Utilisez /ready quand vous êtes prêts.");
-        return true;
+        return false;
     }
 }
