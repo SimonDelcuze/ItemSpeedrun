@@ -70,7 +70,6 @@
         public Setup(main plugin) {
             this.plugin = plugin;
         }
-²
         @EventHandler
         public void onPlayerRespawn(PlayerRespawnEvent event)
         {
