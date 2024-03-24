@@ -45,7 +45,7 @@
 
         private main plugin;
         private static long lastPlayCommandTime = 0;
-        private String lastWorldName = null;
+        public String lastWorldName = null;
 
         private final long cooldown = 30000;
         private Map<Player, String> gameLengths = new HashMap<>();
@@ -80,6 +80,9 @@
                     event.setRespawnLocation(respawnLocation);
                 }
             }
+            ItemStack steaks = new ItemStack(Material.COOKED_BEEF, 64);
+            event.getPlayer().getInventory().addItem(steaks);
+            event.getPlayer().performCommand("trackingcompass");
         }
 
         public void setupPlayerInSpawn(Player player)
