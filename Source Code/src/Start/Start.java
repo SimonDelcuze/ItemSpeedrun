@@ -76,6 +76,7 @@ public class Start implements CommandExecutor {
         player.setSaturation(20);
         player.setGameMode(GameMode.SURVIVAL);
         world.setDifficulty(Difficulty.HARD);
+        world.setPVP(true);
     }
 
     @Override
